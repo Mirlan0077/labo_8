@@ -13,6 +13,7 @@
                         {% endfor %}
                     </p>
                     <div class="btn-group" role="group">
+                    <span></span>
                         <a href="{{ article.get_absolute_url }}" class="btn btn-primary"><i
                                 class="bi bi-blockquote-right"></i></a>
                         {% if perms.webapp.change_article or request.user == article.author %}
@@ -23,6 +24,27 @@
                             <a href="{% url "webapp:delete_article" article.pk %}" class="btn btn-primary"><i
                                     class="bi bi-trash3"></i></a>
                         {% endif %}
+
+{#                        <button class="btn btn-primary like-btn" data-id="{{ article.pk }}" >#}
+                            <a href="{% url "webapp:article_detail" article.pk %}" class="btn btn-primary" data-js="js" >лайк</a>
+
+
+                            {% if request.user in article.likes.all %}
+                                <i class="bi bi-heart-fill" style="color: red;"></i>
+                            {% else %}
+
+                            {% endif %}
+                        </button>
+
+                        <button class="btn btn-primary dislike-btn" data-id="{{ article.pk }}">
+                            {% if request.user in article.dislikes.all %}
+
+                                <i class="bi bi-hand-thumbs-down-fill" style="color: blue;"></i>
+                            {% else %}
+                                <i class="bi bi-hand-thumbs-down"></i>
+                            {% endif %}
+                        </button>
+
                     </div>
                 </div>
             </div>

@@ -1,7 +1,6 @@
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.http import urlencode
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -18,7 +17,6 @@ class ArticleListView(ListView):
     context_object_name = "articles"
     paginate_by = 5
 
-    # paginate_orphans = 2
 
     def dispatch(self, request, *args, **kwargs):
         print(request.user.is_authenticated, "is_authenticated")
@@ -60,6 +58,9 @@ class CreateArticleView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+from django.views.generic import DetailView
+from webapp.models import Article
+
 class ArticleDetailView(DetailView):
     template_name = "articles/article_detail.html"
     model = Article
@@ -89,3 +90,4 @@ class DeleteArticleView(PermissionRequiredMixin, DeleteView):
 
     def has_permission(self):
         return super().has_permission() or self.request.user == self.get_object().author
+
