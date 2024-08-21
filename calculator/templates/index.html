@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+        }
+        .success {
+            background-color: #4CAF50;
+        }
+        .error {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Dimple Calculator</h1>
+    <input type="number" id="numberA" placeholder="Number A">
+    <input type="number" id="numberB" placeholder="Number B">
+    <br>
+    <button onclick="calculate('add')">Add</button>
+    <button onclick="calculate('subtract')">Subtract</button>
+    <button onclick="calculate('multiply')">Multiply</button>
+    <button onclick="calculate('divide')">Divide</button>
+    <div id="result" class="result"></div>
+
+    <script>
+        async function calculate(operation) {
+            const a = document.getElementById('numberA').value;
+            const b = document.getElementById('numberB').value;
+
+            const response = await fetch(`/calculator/${operation}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ A: a, B: b })
+            });
+
+            const result = document.getElementById('result');
+            if (response.ok) {
+                const data = await response.json();
+                result.textContent = `Result: ${data.answer}`;
+                result.className = 'result success';
+            } else {
+                const data = await response.json();
+                result.textContent = `Error: ${data.error}`;
+                result.className = 'result error';
+            }
+        }
+    </script>
+</body>
+</html>
